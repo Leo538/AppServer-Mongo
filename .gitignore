@@ -45,6 +45,13 @@ dist/
 build/
 *.tsbuildinfo
 
+# Angular
+.angular/
+.angular/cache/
+*.ngfactory.ts
+*.ngsummary.json
+*.ngstyle.ts
+
 # Testing
 coverage/
 .nyc_output/

@@ -4,4 +4,8 @@ import  {createApp} from './app.js'
 import { MovieModel } from './models/mongo/movie.js'
 
 connectDB()
-createApp()
+const app = createApp()
+const PORT = process.env.PORT ?? 3500
+app.listen(PORT, () => {
+  console.log(`Server listening in port http://localhost:${PORT}`)
+})
