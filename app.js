@@ -14,8 +14,5 @@ export const createApp = () => {
 
   app.use('/movies', movieRouter)
 
-  const PORT = process.env.PORT ?? 3500
-  app.listen(PORT, () => {
-    console.log(`Server listening in port http://localhost:${PORT}`)
-  })
+  return app
 }
