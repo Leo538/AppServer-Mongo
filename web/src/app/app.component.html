@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="header">
+    <h1>🎬 Películas</h1>
+    <button class="btn-create" (click)="openCreateMovieModal()">
+      <span>+</span> Nueva Película
+    </button>
+  </div>
+  
+  <main>
+    @if (loading) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Cargando películas...</p>
+      </div>
+    } @else {
+      @for (movie of movies; track movie.id) {
+        <article>
+          <div class="movie-image-container">
+            <img [src]="movie.poster" [alt]="movie.title" loading="lazy">
+          </div>
+          <div class="movie-content">
+            <h2>{{ movie.title }}</h2>
+            <div class="movie-info">
+              <strong>📅 Año:</strong>
+              <span>{{ movie.year }}</span>
+            </div>
+            <div class="movie-info">
+              <strong>🎭 Director:</strong>
+              <span>{{ movie.director }}</span>
+            </div>
+            <div class="movie-info">
+              <strong>⏱️ Duración:</strong>
+              <span>{{ movie.duration }} min</span>
+            </div>
+            <div class="movie-info">
+              <strong>⭐ Calificación:</strong>
+              <span class="rate-badge">★ {{ movie.rate }}/10</span>
+            </div>
+            <div class="movie-info">
+              <strong>🎬 Géneros:</strong>
+              <div class="genre-tags">
+                @for (genre of movie.genre; track genre) {
+                  <span class="genre-tag">{{ genre }}</span>
+                }
+              </div>
+            </div>
+            <button (click)="deleteMovie(movie)">🗑️ Eliminar</button>
+          </div>
+        </article>
+      } @empty {
+        <div class="empty">
+          <p>📽️ No hay películas disponibles.</p>
+          <p style="font-size: 1rem; margin-top: 1rem; opacity: 0.8;">Crea tu primera película haciendo clic en el botón de arriba</p>
+        </div>
+      }
+    }
+  </main>
+</div>
+
