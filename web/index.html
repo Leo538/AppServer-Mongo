@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test API</title>
+  <link rel="stylesheet" href="./styless.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+  <main></main>
+
+  <script type="module">
+    fetch('http://localhost:3500/movies')
+      .then(res => res.json())
+      .then(movies => {
+        const html = movies.map(movie => `
+          <article data-id="${movie.id}">
+            <h2>${movie.title}</h2>
+            <img src="${movie.poster}">
+            <p>${movie.year}</p>
+            <button>Eliminar</button>
+          </article>
+        `).join('');
+
+        document.querySelector('main').innerHTML = html;
+
+        document.addEventListener('click', async e => {
+          if (e.target.matches('button')) {
+            const article = e.target.closest('article');
+            const id = article.dataset.id;
+            const title = article.querySelector('h2').textContent;
+
+        
+            const result = await Swal.fire({
+              title: '¿Estás seguro?',
+              html: `<b>${title}</b> será eliminado permanentemente.`,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#e74c3c',
+              cancelButtonColor: '#6c757d',
+              confirmButtonText: 'Sí, eliminar',
+              cancelButtonText: 'Cancelar',
+              background: '#fff',
+              color: '#333',
+              reverseButtons: true,
+              focusCancel: true,
+            });
+
+            if (result.isConfirmed) {
+              fetch(`http://localhost:3500/movies/${id}`, {
+                method: 'DELETE'
+              })
+                .then(res => {
+                  if (res.ok) {
+                    article.remove();
+                    Swal.fire({
+                      title: 'Eliminado',
+                      text: `"${title}" se eliminó correctamente.`,
+                      icon: 'success',
+                      confirmButtonColor: '#3085d6',
+                      background: '#fff',
+                      color: '#333'
+                    });
+                  } else {
+                    Swal.fire('Error', 'No se pudo eliminar la película.', 'error');
+                  }
+                })
+                .catch(() => Swal.fire('Error', 'No se pudo conectar con el servidor.', 'error'));
+            }
+          }
+        });
+      });
+  </script>
+</body>
+</html>
